@@ -82,4 +82,36 @@ public class PostServices {
             System.err.println(err.getMessage());
         }
     }
+
+    public void delPost(Integer id) {
+        try {
+            ConnectionRequest connReq = new ConnectionRequest();
+            connReq.setPost(true);
+            connReq.setContentType("application/json");
+            connReq.setUrl("http://localhost/SoukLemdina/web/social/delPostWS/" + id);
+            connReq.addResponseListener((e) -> {
+                String str = new String(connReq.getResponseData());
+                System.out.println(str);
+            });
+            NetworkManager.getInstance().addToQueueAndWait(connReq);
+        } catch (Exception err) {
+            System.err.println(err.getMessage());
+        }
+    }
+    
+    public void modPost(Post p) {
+        try {
+            ConnectionRequest connReq = new ConnectionRequest();
+            connReq.setPost(true);
+            connReq.setContentType("application/json");
+            connReq.setUrl("http://localhost/SoukLemdina/web/social/modPostWS/" + p.getId() + "/" + p.getTitre() + "/" + p.getTexte());
+            connReq.addResponseListener((e) -> {
+                String str = new String(connReq.getResponseData());
+                System.out.println(str);
+            });
+            NetworkManager.getInstance().addToQueueAndWait(connReq);
+        } catch (Exception err) {
+            System.err.println(err.getMessage());
+        }
+    }
 }

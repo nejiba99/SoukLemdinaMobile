@@ -5,6 +5,7 @@
  */
 package com.souklemdina.gui;
 
+import com.codename1.capture.Capture;
 import com.codename1.components.ImageViewer;
 import com.codename1.components.OnOffSwitch;
 import com.codename1.components.SpanLabel;
@@ -115,14 +116,34 @@ public class AccueilSocial {
                     this.ps.addPost(poss, SessionUser.getUser().getId());
                     tftexte.clear();
                     tftitre.clear();
-                    fa.add(new Label("Publication ajoutée avec succèes"));
+                    AccueilSocial acObj = new AccueilSocial();
+                    acObj.getF().showBack();
                 }
+            });
+            Button btnCapt = new Button("Prendre photo");
+            btnCapt.addActionListener((evt1) -> {
+                this.newfilePath = Capture.capturePhoto();
+                try {
+                    i.setImage(Image.createImage(this.newfilePath));
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
+                }
+                System.out.println(this.newfilePath);
+                try {
+                    this.newfilePath = UploadFile.uploadImage(newfilePath, null);
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+                System.out.println(this.newfilePath);
             });
             btnOpen.getStyle().setPadding(Component.LEFT, 10);
             btnOpen.getStyle().setPadding(Component.RIGHT, 10);
-            btnConf.getStyle().setPadding(Component.LEFT, 10);
+            btnCapt.getStyle().setPadding(Component.LEFT, 10);
+            btnCapt.getStyle().setPadding(Component.RIGHT, 10);
             btnConf.getStyle().setPadding(Component.RIGHT, 10);
+            btnConf.getStyle().setPadding(Component.LEFT, 10);
             hcc.add(btnOpen);
+            hcc.add(btnCapt);
             hcc.add(btnConf);
             fa.add(hcc);
             fa.add(i);
@@ -161,6 +182,45 @@ public class AccueilSocial {
                         pr.follow(SessionUser.getProfile().getId(), p.getPr().getId());
                     });
                     hc.add(btff);
+                } else {
+                    Button btff = new Button("Effacer");
+                    btff.addActionListener((evt) -> {
+                        ps.delPost(p.getPos().getId());
+                        AccueilSocial acObj = new AccueilSocial();
+                        acObj.getF().showBack();
+                    });
+                    hc.add(btff);
+                    Button btup = new Button("Modifier");
+                    btup.addActionListener((evt) -> {
+                        Form fa = new Form("Modifier une publication", BoxLayout.y());
+                        Image icon2 = theme.getImage("back-command.png");
+                        icon2 = icon2.scaled(70, 90);
+                        fa.getToolbar().addCommandToLeftBar("", icon2, e -> {
+                            AccueilSocial acObj = new AccueilSocial();
+                            acObj.getF().showBack();
+                        });
+                        TextField tftitre = new TextField(p.getPos().getTitre());
+                        fa.add(tftitre);
+                        TextField tftexte = new TextField(p.getPos().getTexte());
+                        tftexte.setMaxSize(255);
+                        fa.add(tftexte);
+                        Button btnSave = new Button("Enregistrer");
+                        btnSave.addActionListener((evt1) -> {
+                            Post poss = new Post(p.getPos().getId());
+                            poss.setTexte(tftexte.getText());
+                            poss.setTitre(tftitre.getText());
+                            this.ps.modPost(poss);
+                            tftexte.clear();
+                            tftitre.clear();
+                            AccueilSocial acObj = new AccueilSocial();
+                            acObj.getF().showBack();
+                        });
+                        btnSave.getStyle().setPadding(Component.LEFT, 10);
+                        btnSave.getStyle().setPadding(Component.RIGHT, 10);
+                        fa.add(btnSave);
+                        fa.show();
+                    });
+                    hc.add(btup);
                 }
                 fi.add(hc);
                 SpanLabel titre = new SpanLabel(p.getPos().getTitre());
