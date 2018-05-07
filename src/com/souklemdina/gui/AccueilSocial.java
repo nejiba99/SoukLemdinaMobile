@@ -6,13 +6,16 @@
 package com.souklemdina.gui;
 
 import com.codename1.capture.Capture;
+import com.codename1.util.regex.RE;
 import com.codename1.components.ImageViewer;
 import com.codename1.components.OnOffSwitch;
 import com.codename1.components.SpanLabel;
 import com.codename1.ext.filechooser.FileChooser;
+import com.codename1.l10n.SimpleDateFormat;
 import com.codename1.ui.Button;
 import com.codename1.ui.Component;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
 import com.codename1.ui.Font;
@@ -34,9 +37,11 @@ import com.souklemdina.services.PostServices;
 import com.souklemdina.services.ProfileServices;
 import com.souklemdina.util.SessionUser;
 import com.souklemdina.util.ImageViewerHerit;
+import com.souklemdina.util.Labelherit;
 import com.souklemdina.util.UploadFile;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -53,6 +58,26 @@ public class AccueilSocial {
         Label l = new Label(s);
         l.getUnselectedStyle().setFont(fnt);
         return l;
+    }
+
+    private Labelherit createForFonthh(Font fnt, String s) {
+        Labelherit l = new Labelherit();
+        l.setText(s);
+        l.getUnselectedStyle().setFont(fnt);
+        return l;
+    }
+
+    public boolean isNotGood(String s) {
+        return s.startsWith("0")
+                || s.startsWith("1")
+                || s.startsWith("2")
+                || s.startsWith("3")
+                || s.startsWith("4")
+                || s.startsWith("5")
+                || s.startsWith("6")
+                || s.startsWith("7")
+                || s.startsWith("8")
+                || s.startsWith("9");
     }
 
     public AccueilSocial() {
@@ -108,7 +133,7 @@ public class AccueilSocial {
             });
             Button btnConf = new Button("Publier");
             btnConf.addActionListener((evt1) -> {
-                if (!this.newfilePath.equals("") && this.newfilePath != null) {
+                if (!this.newfilePath.equals("") && this.newfilePath != null && !isNotGood(tftexte.getText()) && !isNotGood(tftitre.getText())) {
                     Post poss = new Post();
                     poss.setTexte(tftexte.getText());
                     poss.setTitre(tftitre.getText());
@@ -118,6 +143,8 @@ public class AccueilSocial {
                     tftitre.clear();
                     AccueilSocial acObj = new AccueilSocial();
                     acObj.getF().showBack();
+                } else {
+                    Dialog.show("Erreur!", "Données érronées", "Ok", "");
                 }
             });
             Button btnCapt = new Button("Prendre photo");
@@ -156,7 +183,7 @@ public class AccueilSocial {
         f.add(vc);
         for (PostHome p : arp) {
             if (p.getPos().getImage() != null) {
-                Image placeholder = Image.createImage(f.getWidth() / 3 - 4, f.getWidth() / 3 - 4, 0xbfc9d2);
+                Image placeholder = Image.createImage(f.getWidth() / 3 - 6, f.getWidth() / 3 - 6, 0xbfc9d2);
                 EncodedImage encImage = EncodedImage.createFromImage(placeholder, false);
                 ImageViewerHerit img = new ImageViewerHerit(URLImage.createToStorage(encImage, "file" + p.getPos().getImage(),
                         "http://localhost/SoukLemdina/web/uploads/images/" + p.getPos().getImage()));
@@ -167,13 +194,39 @@ public class AccueilSocial {
                     AccueilSocial acObj = new AccueilSocial();
                     acObj.getF().showBack();
                 });
+                SimpleDateFormat dfdte = new SimpleDateFormat("dd/MM/yyyy");
+//                FosUser fus = this.pr.findUserById(p.getPr().getIdUser());
+                FosUser fus = new FosUser(5, p.getFirstname(), p.getLastname(), new Date(333333333));
+                String nn = p.getFirstname() + " " + p.getLastname();
+                Form ff = new Form(nn, BoxLayout.y());
+                Image placeholderDett = Image.createImage(f.getWidth(), f.getWidth(), 0xbfc9d2);
+                EncodedImage encImageDett = EncodedImage.createFromImage(placeholderDett, false);
+                ImageViewer imgDett = new ImageViewer(URLImage.createToStorage(encImageDett, "fileDet" + p.getPr().getImage(),
+                        "http://localhost/SoukLemdina/web/uploads/images/" + p.getPr().getImage()));
+                ff.add(imgDett);
+                ff.add(new Label(nn));
+                ff.add(new Label(dfdte.format(fus.getDatenaiss())));
+                ff.add(new Label());
+                ff.add(new SpanLabel(p.getPr().getTagline()));
+                ff.add(new Label());
+                ff.add(new SpanLabel(p.getPr().getAboutMe()));
+                ff.getToolbar().addCommandToLeftBar("", icon, e -> {
+                    AccueilSocial acObj = new AccueilSocial();
+                    acObj.getF().showBack();
+                });
+
                 Image placeholderDet = Image.createImage(f.getWidth(), f.getWidth(), 0xbfc9d2);
                 EncodedImage encImageDet = EncodedImage.createFromImage(placeholderDet, false);
                 ImageViewer imgDet = new ImageViewer(URLImage.createToStorage(encImageDet, "fileDet" + p.getPos().getImage(),
                         "http://localhost/SoukLemdina/web/uploads/images/" + p.getPos().getImage()));
                 fi.add(imgDet);
                 Container hc = new Container(BoxLayout.x());
-                hc.add(createForFont(smallLightSystemFont, p.getFirstname() + " " + p.getLastname()));
+
+                Labelherit lnn = new Labelherit();
+                lnn = createForFonthh(smallLightSystemFont, p.getFirstname() + " " + p.getLastname());
+                lnn.setF(ff);
+
+                hc.add(lnn);
                 if (p.getPr().getIdUser() != SessionUser.getUser().getId()) {
                     OnOffSwitch btff = new OnOffSwitch();
                     btff.setNoTextMode(true);
@@ -185,9 +238,11 @@ public class AccueilSocial {
                 } else {
                     Button btff = new Button("Effacer");
                     btff.addActionListener((evt) -> {
-                        ps.delPost(p.getPos().getId());
-                        AccueilSocial acObj = new AccueilSocial();
-                        acObj.getF().showBack();
+                        if (Dialog.show("Delete", "Êtes vous sûr de supprimer cette publication??", "Oui", "Non")) {
+                            ps.delPost(p.getPos().getId());
+                            AccueilSocial acObj = new AccueilSocial();
+                            acObj.getF().showBack();
+                        }
                     });
                     hc.add(btff);
                     Button btup = new Button("Modifier");
@@ -233,6 +288,32 @@ public class AccueilSocial {
                 f.add(img);
             }
         }
+        Container vc2 = new Container(BoxLayout.y());
+        Button b1 = new Button("Les locaux");
+        Button b2 = new Button("Les évènements");
+        Button b3 = new Button("Les workshops");
+        Button b4 = new Button("Mes commandes");
+        vc2.add(b1).add(b2).add(b3).add(b4);
+        b1.addActionListener((evt) -> {
+            GUILocal gl = new GUILocal();
+            gl.getF().getAllStyles().setBgColor(0x696969);
+            gl.getF().show();
+            Image icon = theme.getImage("back-command.png");
+            gl.getF().getToolbar().addCommandToLeftBar("", icon, e -> {
+                AccueilSocial acObj = new AccueilSocial();
+                acObj.getF().showBack();
+            });
+        });
+        b3.addActionListener((evt) -> {
+            ListeWorks ac = new ListeWorks();
+            ac.getf().show();
+            Image icon = theme.getImage("back-command.png");
+            ac.getf().getToolbar().addCommandToLeftBar("", icon, e -> {
+                AccueilSocial acObj = new AccueilSocial();
+                acObj.getF().showBack();
+            });
+        });
+        vc.add(vc2);
     }
 
     public Form getF() {

@@ -7,6 +7,7 @@ package com.souklemdina.services;
 
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.NetworkManager;
+import com.souklemdina.entities.FosUser;
 
 /**
  *
@@ -23,5 +24,9 @@ public class ProfileServices {
             System.out.println(str);
         });
         NetworkManager.getInstance().addToQueueAndWait(con);
+    }
+    
+    public FosUser findUserById(Integer id){
+        return null;
     }
 }

@@ -50,6 +50,13 @@ public class FosUser implements Serializable {
         this.lastname = lastname;
     }
 
+    public FosUser(Integer id, String firstname, String lastname, Date datenaiss) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.datenaiss = datenaiss;
+    }
+
     public FosUser(Integer id, String username, String usernameCanonical, String email, String emailCanonical, boolean enabled, String salt, String password, Date lastLogin, String confirmationToken, Date passwordRequestedAt, String roles, String gender, String firstname, String lastname, String rue, String zipCode, String ville, String pays, String phone, Integer nbsignal) {
         this.id = id;
         this.username = username;
