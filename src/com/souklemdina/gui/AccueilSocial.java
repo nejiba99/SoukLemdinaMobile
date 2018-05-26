@@ -6,7 +6,6 @@
 package com.souklemdina.gui;
 
 import com.codename1.capture.Capture;
-import com.codename1.util.regex.RE;
 import com.codename1.components.ImageViewer;
 import com.codename1.components.OnOffSwitch;
 import com.codename1.components.SpanLabel;
@@ -41,7 +40,6 @@ import com.souklemdina.util.Labelherit;
 import com.souklemdina.util.UploadFile;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  *
@@ -80,23 +78,24 @@ public class AccueilSocial {
                 || s.startsWith("9");
     }
 
-    public AccueilSocial() {
+    public AccueilSocial(Form home) {
 //        f = new Form("Hdith ElSouk", BoxLayout.y());
         f = new Form("Hdith ElSouk", new FlowLayout());
+        f.getToolbar().addCommandToLeftBar("back", null, e1 -> {
+                                    home.showBack();
+                                });
         Resources theme = UIManager.initFirstTheme("/theme");
         Font smallBoldSystemFont = Font.createTrueTypeFont("native:ItalicBold", "native:ItalicBold").derive(Display.getInstance().convertToPixels(3), Font.STYLE_PLAIN);
         Font smallLightSystemFont = Font.createTrueTypeFont("native:ItalicLight", "native:ItalicLight").derive(Display.getInstance().convertToPixels(3), Font.STYLE_PLAIN);
         //Here goes the connection Logic
-        SessionUser.setUser(new FosUser(3));
-        SessionUser.setProfile(new Profile(5));
-        ArrayList<PostHome> arp = ps.getAccueil(3);
+        ArrayList<PostHome> arp = ps.getAccueil(SessionUser.getUser().getId());
         Button btnAdd = new Button("Ajouter une publication");
         btnAdd.addActionListener((evt) -> {
             Form fa = new Form("Ajouter une publication", BoxLayout.y());
             Image icon = theme.getImage("back-command.png");
             icon = icon.scaled(70, 90);
             fa.getToolbar().addCommandToLeftBar("", icon, e -> {
-                AccueilSocial acObj = new AccueilSocial();
+                AccueilSocial acObj = new AccueilSocial(home);
                 acObj.getF().showBack();
             });
             TextField tftitre = new TextField("", "Titre");
@@ -141,7 +140,7 @@ public class AccueilSocial {
                     this.ps.addPost(poss, SessionUser.getUser().getId());
                     tftexte.clear();
                     tftitre.clear();
-                    AccueilSocial acObj = new AccueilSocial();
+                    AccueilSocial acObj = new AccueilSocial(home);
                     acObj.getF().showBack();
                 } else {
                     Dialog.show("Erreur!", "Données érronées", "Ok", "");
@@ -191,12 +190,12 @@ public class AccueilSocial {
                 Image icon = theme.getImage("back-command.png");
                 icon = icon.scaled(70, 90);
                 fi.getToolbar().addCommandToLeftBar("", icon, e -> {
-                    AccueilSocial acObj = new AccueilSocial();
+                    AccueilSocial acObj = new AccueilSocial(home);
                     acObj.getF().showBack();
                 });
                 SimpleDateFormat dfdte = new SimpleDateFormat("dd/MM/yyyy");
 //                FosUser fus = this.pr.findUserById(p.getPr().getIdUser());
-                FosUser fus = new FosUser(5, p.getFirstname(), p.getLastname(), new Date(333333333));
+                FosUser fus = new FosUser(5, p.getFirstname(), p.getLastname());
                 String nn = p.getFirstname() + " " + p.getLastname();
                 Form ff = new Form(nn, BoxLayout.y());
                 Image placeholderDett = Image.createImage(f.getWidth(), f.getWidth(), 0xbfc9d2);
@@ -205,13 +204,12 @@ public class AccueilSocial {
                         "http://localhost/SoukLemdina/web/uploads/images/" + p.getPr().getImage()));
                 ff.add(imgDett);
                 ff.add(new Label(nn));
-                ff.add(new Label(dfdte.format(fus.getDatenaiss())));
                 ff.add(new Label());
                 ff.add(new SpanLabel(p.getPr().getTagline()));
                 ff.add(new Label());
                 ff.add(new SpanLabel(p.getPr().getAboutMe()));
                 ff.getToolbar().addCommandToLeftBar("", icon, e -> {
-                    AccueilSocial acObj = new AccueilSocial();
+                    AccueilSocial acObj = new AccueilSocial(home);
                     acObj.getF().showBack();
                 });
 
@@ -240,7 +238,7 @@ public class AccueilSocial {
                     btff.addActionListener((evt) -> {
                         if (Dialog.show("Delete", "Êtes vous sûr de supprimer cette publication??", "Oui", "Non")) {
                             ps.delPost(p.getPos().getId());
-                            AccueilSocial acObj = new AccueilSocial();
+                            AccueilSocial acObj = new AccueilSocial(home);
                             acObj.getF().showBack();
                         }
                     });
@@ -251,7 +249,7 @@ public class AccueilSocial {
                         Image icon2 = theme.getImage("back-command.png");
                         icon2 = icon2.scaled(70, 90);
                         fa.getToolbar().addCommandToLeftBar("", icon2, e -> {
-                            AccueilSocial acObj = new AccueilSocial();
+                            AccueilSocial acObj = new AccueilSocial(home);
                             acObj.getF().showBack();
                         });
                         TextField tftitre = new TextField(p.getPos().getTitre());
@@ -267,7 +265,7 @@ public class AccueilSocial {
                             this.ps.modPost(poss);
                             tftexte.clear();
                             tftitre.clear();
-                            AccueilSocial acObj = new AccueilSocial();
+                            AccueilSocial acObj = new AccueilSocial(home);
                             acObj.getF().showBack();
                         });
                         btnSave.getStyle().setPadding(Component.LEFT, 10);
@@ -288,32 +286,6 @@ public class AccueilSocial {
                 f.add(img);
             }
         }
-        Container vc2 = new Container(BoxLayout.y());
-        Button b1 = new Button("Les locaux");
-        Button b2 = new Button("Les évènements");
-        Button b3 = new Button("Les workshops");
-        Button b4 = new Button("Mes commandes");
-        vc2.add(b1).add(b2).add(b3).add(b4);
-        b1.addActionListener((evt) -> {
-            GUILocal gl = new GUILocal();
-            gl.getF().getAllStyles().setBgColor(0x696969);
-            gl.getF().show();
-            Image icon = theme.getImage("back-command.png");
-            gl.getF().getToolbar().addCommandToLeftBar("", icon, e -> {
-                AccueilSocial acObj = new AccueilSocial();
-                acObj.getF().showBack();
-            });
-        });
-        b3.addActionListener((evt) -> {
-            ListeWorks ac = new ListeWorks();
-            ac.getf().show();
-            Image icon = theme.getImage("back-command.png");
-            ac.getf().getToolbar().addCommandToLeftBar("", icon, e -> {
-                AccueilSocial acObj = new AccueilSocial();
-                acObj.getF().showBack();
-            });
-        });
-        vc.add(vc2);
     }
 
     public Form getF() {

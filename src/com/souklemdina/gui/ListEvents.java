@@ -93,8 +93,6 @@ public class ListEvents {
         Font smallBoldSystemFont = Font.createTrueTypeFont("native:ItalicBold", "native:ItalicBold").derive(Display.getInstance().convertToPixels(3), Font.STYLE_PLAIN);
         Font smallLightSystemFont = Font.createTrueTypeFont("native:ItalicLight", "native:ItalicLight").derive(Display.getInstance().convertToPixels((float) 2.2), Font.STYLE_ITALIC);
 
-        SessionUser.setUser(new FosUser(3));
-
         UIBuilder.registerCustomComponent("DateTimeSpinner", DateTimeSpinner.class);
 
         Resources theme = UIManager.initFirstTheme("/theme");
@@ -600,8 +598,6 @@ public class ListEvents {
             fe.add(supp);
 
         }
-        fe.show();
-
     }
 
     public boolean isNumber(String s) {

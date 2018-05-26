@@ -40,6 +40,8 @@ public class ParticipantWorkService {
         String Url = "http://localhost/SoukLemdina/web/workshop/SwitchBTn/"
                 + idWork + "/"
                 + idUser;
+        System.out.println(idWork);
+        System.out.println(idUser);
         con.setUrl(Url);
 
         con.addResponseListener((e) -> {

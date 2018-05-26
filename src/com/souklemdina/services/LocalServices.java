@@ -94,6 +94,7 @@ public class LocalServices {
                           
                                 );
                     System.out.println("pppp"+loc.getId());
+                    System.out.println(loc.getImage());
                     mapLocx.add(loc);
                 }
 

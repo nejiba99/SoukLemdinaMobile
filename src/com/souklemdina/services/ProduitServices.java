@@ -39,12 +39,20 @@ public class ProduitServices {
 
                 // System.out.println(obj.get("id"));
                 float id = Float.parseFloat(obj.get("id").toString());
+                float promotion = Float.parseFloat(obj.get("promotion").toString());
+                float quantite = Float.parseFloat(obj.get("quqntite").toString());
+                float userId = Float.parseFloat(obj.get("id_user").toString());
                 System.out.println(id);
                 p.setId((int) id);
                 //e.setId(Integer.parseInt(obj.get("id").toString().trim()));
                 p.setLibelle(obj.get("libelle").toString());
                 p.setDescription(obj.get("description").toString());
                 p.setPrix(Double.parseDouble(obj.get("prix").toString()));
+                p.setPromotion((int)promotion);
+                p.setQuqntite((int)quantite);
+                p.setIdUser((int)userId);
+                p.setType((obj.get("type").toString()));
+                p.setCategorie((obj.get("categorie").toString()));
                 p.setImage(obj.get("image").toString());
                 System.out.println(p);
                 listProduits.add(p);

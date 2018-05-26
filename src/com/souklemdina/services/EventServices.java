@@ -97,7 +97,7 @@ public class EventServices {
                             ((Double) obj.get("prix")),
                             (int) Float.parseFloat(obj.get("nbPlace").toString()),
                             obj.get("description").toString(),
-                            (int) Float.parseFloat(String.valueOf(obj.get("rating"))),
+                            (int) Float.parseFloat(obj.get("rating").toString()),
 
 
                             (int) Float.parseFloat(obj.get("idUser").toString()));

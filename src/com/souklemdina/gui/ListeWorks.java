@@ -12,24 +12,20 @@ import com.codename1.charts.renderers.SimpleSeriesRenderer;
 import com.codename1.charts.util.ColorUtil;
 import com.codename1.charts.views.PieChart;
 import com.codename1.components.ImageViewer;
-import com.codename1.components.MultiButton;
 import com.codename1.components.SpanLabel;
 import com.codename1.ext.filechooser.FileChooser;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
 import com.codename1.io.Log;
 import com.codename1.io.NetworkManager;
-import static com.codename1.io.rest.Rest.options;
 import com.codename1.processing.Result;
 import com.codename1.ui.AutoCompleteTextField;
 import com.codename1.ui.Button;
-import com.codename1.ui.ComboBox;
 
 import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
-import com.codename1.ui.Font;
 
 import com.codename1.ui.Form;
 import com.codename1.ui.Image;
@@ -42,13 +38,11 @@ import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.list.DefaultListModel;
-import com.codename1.ui.list.GenericListCellRenderer;
 import com.codename1.ui.plaf.Border;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.spinner.Picker;
 import com.codename1.ui.util.Resources;
 import com.codename1.util.regex.RE;
-import com.souklemdina.entities.FosUser;
 import com.souklemdina.entities.ParticipantWork;
 import com.souklemdina.entities.Workshop;
 import com.souklemdina.services.ParticipantWorkService;
@@ -62,7 +56,6 @@ import java.io.InputStreamReader;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -76,7 +69,6 @@ public class ListeWorks {
     private static final String apiKey = "AIzaSyBWeRU02YUYPdwRuMFyTKIXUbHjq6e35Gw";
     final DefaultListModel<String> options = new DefaultListModel<>();
     WorkshopServices ws = new WorkshopServices();
-    FosUser fu = new FosUser(5);
     ParticipantWork p = new ParticipantWork();
     public ParticipantWorkService pw = new ParticipantWorkService();
     private Form f;
@@ -91,13 +83,11 @@ public class ListeWorks {
     int nbp = 0;
     int nbPart = 0;
 
-
     public ListeWorks() {
         Resources theme = UIManager.initFirstTheme("/theme");
 
         f = new Form("Liste des Workshops", new BoxLayout(BoxLayout.Y_AXIS));
 
-        SessionUser.setUser(new FosUser(3));
         Picker txTyp = new Picker();
 
         Button btnAj = new Button("Ajouter Votre Workshop");
@@ -144,13 +134,12 @@ public class ListeWorks {
             Picker datedeb = new Picker();
             datedeb.setType(Display.PICKER_TYPE_DATE);
             datedeb.setDate(new Date());
-     
+
             fa.add(datedeb);
             Picker datefin = new Picker();
             datefin.setType(Display.PICKER_TYPE_DATE);
             datefin.setDate(new Date());
-            
-               
+
             fa.add(datefin);
             //Picker txtTyp = new Picker();
             Container cTyp = new Container(new BoxLayout(BoxLayout.Y_AXIS));
@@ -172,10 +161,10 @@ public class ListeWorks {
                     testPrix = true;
                 }
             });
-            datefin.addPointerReleasedListener((l)->{
-                
+            datefin.addPointerReleasedListener((l) -> {
+
             });
-            
+
             fa.add(nb);
 
             TextField prix = new TextField("", "Prix", 100, TextField.NUMERIC);
@@ -220,31 +209,31 @@ public class ListeWorks {
 
             Button btnConf = new Button("Ajouter");
             btnConf.addActionListener((evt1) -> {
-                
-                      String dd =datedeb.getText();
-           String  year = dd.substring(dd.length()-2,dd.length());
-           int dy = Integer.parseInt(year);
-           String month = (dd.substring(dd.indexOf("/")+1)).substring(0, dd.indexOf("/"));
-           int dm = Integer.parseInt(month);
-           String day = dd.substring(0,dd.indexOf("/"));
-           int dday = Integer.parseInt(day); 
-                
-           String df =datefin.getText();
-           String  yearf= df.substring(df.length()-2,df.length());
-           int dfy = Integer.parseInt(yearf);
-           String monthf = (df.substring(df.indexOf("/")+1)).substring(0, df.indexOf("/"));
-           int dfm = Integer.parseInt(monthf);
-           String dayf = df.substring(0,df.indexOf("/"));
-           int ddayf = Integer.parseInt(dayf);
-            System.out.println("year"+dfy);
-            
-                if (dy>dfy || (dy==dfy && dday>ddayf) ||(dy==dfy && dday==ddayf && dm>dfm)||
-                        (nom.getText().equals(""))  ||
-                        (ac.getText().equals("")) ||
-                        (desc.getText().equals("")) || (txTyp.getSelectedStringIndex() < 0)|| 
-                        (prix.getText().equals("")) || 
-                        (nb.getText().equals("")) ||
-                         (desc.getText().equals(""))) {
+
+                String dd = datedeb.getText();
+                String year = dd.substring(dd.length() - 2, dd.length());
+                int dy = Integer.parseInt(year);
+                String month = (dd.substring(dd.indexOf("/") + 1)).substring(0, dd.indexOf("/"));
+                int dm = Integer.parseInt(month);
+                String day = dd.substring(0, dd.indexOf("/"));
+                int dday = Integer.parseInt(day);
+
+                String df = datefin.getText();
+                String yearf = df.substring(df.length() - 2, df.length());
+                int dfy = Integer.parseInt(yearf);
+                String monthf = (df.substring(df.indexOf("/") + 1)).substring(0, df.indexOf("/"));
+                int dfm = Integer.parseInt(monthf);
+                String dayf = df.substring(0, df.indexOf("/"));
+                int ddayf = Integer.parseInt(dayf);
+                System.out.println("year" + dfy);
+
+                if (dy > dfy || (dy == dfy && dday > ddayf) || (dy == dfy && dday == ddayf && dm > dfm)
+                        || (nom.getText().equals(""))
+                        || (ac.getText().equals(""))
+                        || (desc.getText().equals("")) || (txTyp.getSelectedStringIndex() < 0)
+                        || (prix.getText().equals(""))
+                        || (nb.getText().equals(""))
+                        || (desc.getText().equals(""))) {
                     Dialog.show("Alerte", "Veuillez remplir tous les champs ou vérifier les données saisies", "Ok", null);
                 } else {
 
@@ -291,28 +280,25 @@ public class ListeWorks {
             img1.setPreferredH(300);
             img1.setPreferredW(450);
             Container btSup = new Container(new BoxLayout(BoxLayout.Y_AXIS));
-           
-           Button supp =new Button("Supprimer");
- if (w.getIdUser() != fu.getId()) {
-                            supp.setVisible(false);
-                        }
- //cn2.add(btSup);
-  btSup.add(supp);
-supp.addActionListener(new ActionListener() {
-     
-              @Override
-              public void actionPerformed(ActionEvent evt) {
-                  if(Dialog.show("Confirmation","Etes vous sûr de vouloir supprimer ce local?","Oui","Annuler")){
-                  ws.Delete(w, SessionUser.getUser().getId(), w.getId());
-                  ListeWorks lis = new ListeWorks();
+
+            Button supp = new Button("Supprimer");
+
+            cn2.add(btSup);
+      
+            supp.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent evt) {
+                    if (Dialog.show("Confirmation", "Etes vous sûr de vouloir supprimer ce local?", "Oui", "Annuler")) {
+                        ws.Delete(w, SessionUser.getUser().getId(), w.getId());
+                        ListeWorks lis = new ListeWorks();
                         lis.getf().showBack();
-                   lis.getf().showBack();
-                  }
-             
-              }
-          });
-            
-           
+                        lis.getf().showBack();
+                    }
+
+                }
+            });
+
             Label l = new Label(w.getNomWorkshop());
             Label pr = new Label(("Places: " + String.valueOf(w.getNbPlace())));
             Label des = new Label("Prix: " + String.valueOf(w.getPrix()));
@@ -344,7 +330,6 @@ supp.addActionListener(new ActionListener() {
                     nbPart = ws.nbPar(w.getId());
                     System.out.println("www.getNbPlace()" + w.getNbPlace());
                     System.out.println("www.id()" + w.getId());
-                    System.out.println(ws.nbPar(27));
                     System.out.println("ws.nbPar(www.getId())" + ws.nbPar(w.getId()));
                     // System.out.println("nbplaaaaaaaaaaaaaaaaaaaaaaaaaaaace "+w.getNbPlace());
                     // System.out.println("nbpméchlaaaaaaaaaaaaaaaaaaaaaaaaaaaace "+w.getId());
@@ -368,7 +353,7 @@ supp.addActionListener(new ActionListener() {
                     Label D = new Label("Début : " + w.getDateDeb());
                     Label F = new Label("Fin : " + w.getDateF());
                     cD.addAll(D, F);
-                    cadre.addAll(cD,espace ,cdes);
+                    cadre.addAll(cD, espace, cdes);
                     ImageViewer img = new ImageViewer(URLImage.createToStorage(encImage, "file" + w.getImage(),
                             "http://localhost/SoukLemdina/web/uploads/images/" + w.getImage()));
 
@@ -376,9 +361,6 @@ supp.addActionListener(new ActionListener() {
 
                     modif.getAllStyles().getBackgroundGradientEndColor();
                     modif.addActionListener((evt1) -> {
-                        if (w.getIdUser() != +SessionUser.getUser().getId()) {
-                            modif.setVisible(false);
-                        }
                         Form fa = new Form("Modifier un Workshop", BoxLayout.y());
                         Image icon2 = theme.getImage("back-command.png");
                         icon2 = icon2.scaled(70, 90);
@@ -413,6 +395,11 @@ supp.addActionListener(new ActionListener() {
                         ac.setMinimumElementsShownInPopup(5);
 //            TextField adres = new TextField(w.getAdresse());
 //            adres.setMaxSize(255);
+ f1.getToolbar().addCommandToLeftBar("Retour à la liste", theme.getImage("back-command.png"), v -> {
+
+                        f.showBack();
+                    });
+
                         fa.add(lad);
                         fa.add(ac);
                         ImageViewer iAdd = new ImageViewer();
@@ -449,7 +436,7 @@ supp.addActionListener(new ActionListener() {
                         });
                         fa.add(prix);
                         fa.add(nb);
-                        
+
                         Container cTyp = new Container(new BoxLayout(BoxLayout.Y_AXIS));
                         Label labTyp = new Label("Type: ");
 
@@ -460,26 +447,26 @@ supp.addActionListener(new ActionListener() {
                         Container hcc = new Container(BoxLayout.y());
                         Button btnOpen1 = new Button("Modifier Image");
                         btnOpen1.addActionListener((ett) -> {
-                                        String dd =datedeb.getText();
-           String  year = dd.substring(dd.length()-2,dd.length());
-           int dy = Integer.parseInt(year);
-           String month = (dd.substring(dd.indexOf("/")+1)).substring(0, dd.indexOf("/"));
-           int dm = Integer.parseInt(month);
-           String day = dd.substring(0,dd.indexOf("/"));
-           int dday = Integer.parseInt(day); 
-                
-           String df =datefin.getText();
-           String  yearf= df.substring(df.length()-2,df.length());
-           int dfy = Integer.parseInt(yearf);
-           String monthf = (df.substring(df.indexOf("/")+1)).substring(0, df.indexOf("/"));
-           int dfm = Integer.parseInt(monthf);
-           String dayf = df.substring(0,df.indexOf("/"));
-           int ddayf = Integer.parseInt(dayf);
-            System.out.println("year"+dfy);
-            
-                if (dy>dfy || (dy==dfy && dday>ddayf) ||(dy==dfy && dday==ddayf && dm>dfm)) {
-                    Dialog.show("Alerte", "Date debut doit etre inf", "Ok", null);
-                } 
+                            String dd = datedeb.getText();
+                            String year = dd.substring(dd.length() - 2, dd.length());
+                            int dy = Integer.parseInt(year);
+                            String month = (dd.substring(dd.indexOf("/") + 1)).substring(0, dd.indexOf("/"));
+                            int dm = Integer.parseInt(month);
+                            String day = dd.substring(0, dd.indexOf("/"));
+                            int dday = Integer.parseInt(day);
+
+                            String df = datefin.getText();
+                            String yearf = df.substring(df.length() - 2, df.length());
+                            int dfy = Integer.parseInt(yearf);
+                            String monthf = (df.substring(df.indexOf("/") + 1)).substring(0, df.indexOf("/"));
+                            int dfm = Integer.parseInt(monthf);
+                            String dayf = df.substring(0, df.indexOf("/"));
+                            int ddayf = Integer.parseInt(dayf);
+                            System.out.println("year" + dfy);
+
+                            if (dy > dfy || (dy == dfy && dday > ddayf) || (dy == dfy && dday == ddayf && dm > dfm)) {
+                                Dialog.show("Alerte", "Date debut doit etre inf", "Ok", null);
+                            }
                             ActionListener callback = e -> {
                                 if (e != null && e.getSource() != null) {
                                     try {
@@ -541,7 +528,7 @@ supp.addActionListener(new ActionListener() {
                         fa.add(btnConf);
                         fa.show();
                     });
-                    if (w.getIdUser() != fu.getId()) {
+                    if (w.getIdUser() != SessionUser.getUser().getId()) {
                         Button part = new Button("Participer");
                         f1.add(part);
                         part.setVisible(true);
@@ -553,7 +540,7 @@ supp.addActionListener(new ActionListener() {
 //            part.setVisible(false);
 //      }
 
-                        if (pw.SwitchBTn(w.getId(), fu.getId()).equals("{zeineb=true}")) {
+                        if (pw.SwitchBTn(w.getId(), SessionUser.getUser().getId()).equals("{\"zeineb\":true}")) {
                             part.setText("Ne Plus Participer");
                         }
 
@@ -561,8 +548,8 @@ supp.addActionListener(new ActionListener() {
                         part.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent evt) {
-                                pw.Switch(w.getId(), fu.getId());
-                                if (pw.SwitchBTn(w.getId(), fu.getId()).equals("{zeineb=true}")) {
+                                pw.Switch(w.getId(), SessionUser.getUser().getId());
+                                if (pw.SwitchBTn(w.getId(), SessionUser.getUser().getId()).equals("{\"zeineb\":true}")) {
                                     part.setText("Ne Plus Participer");
                                 } else {
                                     part.setText(" Participer");
@@ -571,8 +558,9 @@ supp.addActionListener(new ActionListener() {
                         });
 
                     }
-
-                    f1.add(modif);
+                    if (w.getIdUser().equals(SessionUser.getUser().getId())) {
+                        f1.add(modif);
+                    }
 
                     f1.add(img);
 
@@ -591,10 +579,11 @@ supp.addActionListener(new ActionListener() {
             });
 // f.add(cn2);
             f.addComponent(c2);
-         f.add(btSup);
+            if (w.getIdUser() == SessionUser.getUser().getId()) {
+                f.add(supp);
+            }
 
-           //f.add(img1);
-
+            //f.add(img1);
         }
 
         f.show();
@@ -658,7 +647,7 @@ supp.addActionListener(new ActionListener() {
 
         double[] values = new double[]{nbp, nbPart};
         // double[] values = new double[]{12, 14, 11, 10, 19};
-String[] titles = new String[]{"Nbre de place", "Nbre de participants"};
+        String[] titles = new String[]{"Nbre de place", "Nbre de participants"};
         int[] colors = new int[]{ColorUtil.BLUE, ColorUtil.GREEN, ColorUtil.MAGENTA, ColorUtil.YELLOW, ColorUtil.CYAN};
         DefaultRenderer renderer = buildCategoryRenderer(colors);
         renderer.setZoomButtonsVisible(true);
@@ -670,7 +659,7 @@ String[] titles = new String[]{"Nbre de place", "Nbre de participants"};
         r.setGradientEnabled(true);
         r.setGradientStart(0, ColorUtil.BLUE);
         r.setGradientStop(0, ColorUtil.GREEN);
-         //renderer.setChartTitleTextFont(largeFont);
+        //renderer.setChartTitleTextFont(largeFont);
         r.setHighlighted(true);
 
         // Create the chart ... pass the values and renderer to the chart object.

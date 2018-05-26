@@ -5,6 +5,7 @@
  */
 package com.souklemdina.services;
 
+import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkManager;
@@ -13,6 +14,7 @@ import com.souklemdina.entities.Workshop;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -79,8 +81,6 @@ public class WorkshopServices {
         try {
 
             ConnectionRequest connReq = new ConnectionRequest();
-            connReq.setPost(true);
-            connReq.setContentType("application/json");
             connReq.setUrl("http://localhost/SoukLemdina/web/workshop/DeleteMob/" + id + "/" + idW
             );
 
@@ -156,6 +156,7 @@ public class WorkshopServices {
 
         ConnectionRequest con = new ConnectionRequest();
         String Url = "http://localhost/SoukLemdina/web/workshop/nbParticipantsW/" + id;
+        System.out.println("This is the id: " + id);
         con.setUrl(Url);
         con.addResponseListener((e) -> {
             WorkshopServices ws = new WorkshopServices();
@@ -165,10 +166,10 @@ public class WorkshopServices {
 
                 JSONParser jp = new JSONParser();
 
-                Map<String, Object> events = jp.parseJSON(new com.codename1.io.CharArrayReader(jsonj.toCharArray()));
+                Map<String, Object> events = jp.parseJSON(new CharArrayReader(jsonj.toCharArray()));
                 System.out.println(events);
 
-                java.util.List<Map<String, Object>> list = (java.util.List<Map<String, Object>>) events.get("root");
+                List<Map<String, Object>> list = (List<Map<String, Object>>) events.get("root");
 
                 for (Map<String, Object> obj : list) {//
                     this.nb = (int) Float.parseFloat(obj.get("nb").toString());

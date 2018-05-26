@@ -13,6 +13,7 @@ import com.souklemdina.entities.InfoPersonnel;
 import com.souklemdina.entities.Panier;
 import com.souklemdina.services.LigneDeCommandeServices;
 import com.souklemdina.services.PanierServices;
+import com.souklemdina.util.SessionUser;
 import java.util.ArrayList;
 
 /**
@@ -57,16 +58,16 @@ public class AjouterLigneDeCommande {
         PanierServices ps = new PanierServices();
 
                      LigneDeCommandeServices lcs = new LigneDeCommandeServices();
-       lcs.addCommandeAndLigneDeCommande(fu.getId());
+       lcs.addCommandeAndLigneDeCommande(SessionUser.getUser().getId());
   ps.createDB();
        // InfoPersonnel ip = new InfoPersonnel();
-       lstp=ps.returnPanier(fu.getId());
+       lstp=ps.returnPanier(SessionUser.getUser().getId());
        for(Panier p : lstp)
        {
         //   System.out.println("idprod "+p.getId());
           // System.out.println("iduuuuu "+p.getIdu());
-                   lcs.addLigneDeCommande(fu.getId(), p);
-ps.DeleteFromPanier(fu.getId(), p.getId());      
+                   lcs.addLigneDeCommande(SessionUser.getUser().getId(), p);
+ps.DeleteFromPanier(SessionUser.getUser().getId(), p.getId());      
        }
        AffichageCommande ac = new AffichageCommande();
           }

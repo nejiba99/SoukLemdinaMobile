@@ -6,8 +6,6 @@
 package com.souklemdina.gui;
 
 import com.codename1.components.Accordion;
-import com.codename1.components.SpanLabel;
-import com.codename1.io.Log;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
@@ -20,7 +18,6 @@ import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
-import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.table.TableLayout;
 import com.codename1.ui.util.Resources;
@@ -70,8 +67,6 @@ public class AffichageCommande {
         TableLayout layout = new TableLayout(1, 3);
         TableLayout.Constraint constraint = layout.createConstraint();
         constraint.setWidthPercentage(200);
-        // ahawa user
-        SessionUser.setUser(new FosUser(3));
         Container c0 = new Container(new BoxLayout(BoxLayout.X_AXIS));
         Label lh1 = new Label("Id    ");
         Label lh2 = new Label("Date Commande");
@@ -85,7 +80,7 @@ public class AffichageCommande {
             //  AfficherPanier affp = new AfficherPanier().getF();
         tb.addMaterialCommandToSideMenu("Panier", FontImage.MATERIAL_ADD_A_PHOTO, e->{new AfficherPanier().getF().show();});
         tb.addMaterialCommandToSideMenu("Wishlist", FontImage.MATERIAL_AC_UNIT, e->{new AfficherLigneWishlist(fu.getId()).getF().show();});
-        ArrayList<Commande> lstC = cs.getCommandes(3);
+        ArrayList<Commande> lstC = cs.getCommandes(SessionUser.getUser().getId());
 
         for (Commande c : lstC) {
 

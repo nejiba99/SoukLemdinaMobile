@@ -102,6 +102,7 @@ public class GUILocal {
                 System.out.println("refreshed");
             });
             GUILocal gl = new GUILocal();
+            gl.getF().getAllStyles().setBgColor(0x696969);
             gl.getF().showBack();
 
         });
@@ -264,9 +265,7 @@ public class GUILocal {
             }
         });
 
-        //Afficher locaux user
-        SessionUser.setUser(new FosUser(3));
-        listLU = ls.afficherUser(3);
+        listLU = ls.afficherUser(SessionUser.getUser().getId());
         for (Local l : listLU) {
             Container c = new Container(new BoxLayout(BoxLayout.X_AXIS));
             c.getAllStyles().setPaddingTop(25);
@@ -275,7 +274,7 @@ public class GUILocal {
             c.getAllStyles().setBorder(Border.createLineBorder(1, ColorUtil.rgb(32, 32, 32)));
             Image placeholder = Image.createImage(me.getWidth() / 3 - 4, me.getWidth() / 3 - 4, 0xbfc9d2);
             EncodedImage encImage = EncodedImage.createFromImage(placeholder, false);
-            ImageViewerHerit img = new ImageViewerHerit(URLImage.createToStorage(encImage, "file" + l.getImage(),
+            ImageViewer img = new ImageViewer(URLImage.createToStorage(encImage, "file" + l.getImage(),
                     "http://localhost/SoukLemdina/web/uploads/images/" + l.getImage()));
 
             Container cont = new Container(new BoxLayout(BoxLayout.Y_AXIS));
@@ -454,7 +453,7 @@ public class GUILocal {
 
             Image placeholder = Image.createImage(f.getWidth() / 3 - 4, f.getWidth() / 3 - 4, 0xbfc9d2);
             EncodedImage encImage = EncodedImage.createFromImage(placeholder, false);
-            ImageViewerHerit img = new ImageViewerHerit(URLImage.createToStorage(encImage, "file" + l.getImage(),
+            ImageViewer img = new ImageViewer(URLImage.createToStorage(encImage, "file"+l.getImage(),
                     "http://localhost/SoukLemdina/web/uploads/images/" + l.getImage()));
 
             System.out.println(l.getImage());
@@ -478,7 +477,7 @@ public class GUILocal {
                     det.getAllStyles().setBgColor(0x696969);
                     Image placeholderDet = Image.createImage(f.getWidth(), f.getWidth(), 0xbfc9d2);
                     EncodedImage encImageDet = EncodedImage.createFromImage(placeholderDet, false);
-                    ImageViewerHerit imgDet = new ImageViewerHerit(URLImage.createToStorage(encImageDet, "file" + l.getImage(),
+                    ImageViewer imgDet = new ImageViewer(URLImage.createToStorage(encImageDet, "file" + l.getImage(),
                             "http://localhost/SoukLemdina/web/uploads/images/" + l.getImage()));
                     Container ctx = new Container(new BoxLayout(BoxLayout.X_AXIS));
                     SpanLabel lab = new SpanLabel("Description: ");
@@ -720,7 +719,7 @@ public class GUILocal {
 
                                     }
 //                                    
-                                    if (ddY > dfY || (ddY == dfY && ddD > dfD) || (ddY == dfY && ddD == dfD && ddM > dfM) || (ddY < yn) || (dfY < yn) || (ddY == yn && ddD < dn) || (ddY == yn && ddD == dn && ddM < mn) || (dfY == yn && dfD < dn) || (dfY == yn && dfD == dn && dfM < mn) ) {
+                                    if (ddY > dfY || (ddY == dfY && ddD > dfD) || (ddY == dfY && ddD == dfD && ddM > dfM) || (ddY < yn) || (dfY < yn) || (ddY == yn && ddD < dn) || (ddY == yn && ddD == dn && ddM < mn) || (dfY == yn && dfD < dn) || (dfY == yn && dfD == dn && dfM < mn)) {
                                         Dialog.show("Erreur", "Données eronnés", "OK", null);
 
                                     } else if (i == 0) {
@@ -758,7 +757,7 @@ public class GUILocal {
                 }
             });
             f.addComponent(c);
-            img.setF(f);
+
         }
         f.show();
     }

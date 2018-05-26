@@ -30,7 +30,7 @@ public class FosUserServices {
 public boolean login(String username,String password){
         ArrayList<FosUser> listuser= new ArrayList<>();
           ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/SoukLemdina/web/fos/loginWS/"+username+"/"+password);  
+        con.setUrl("http://localhost/SoukLemdina/web/loginWS/"+username+"/"+password);  
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -73,7 +73,7 @@ public boolean login(String username,String password){
     public FosUser getuser(String username,String password){
         ArrayList<FosUser> listuser= new ArrayList<>();
           ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/SoukLemdina/web/fos/loginWS/"+username+"/"+password);  
+        con.setUrl("http://localhost/SoukLemdina/web/loginWS/"+username+"/"+password);  
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {

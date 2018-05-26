@@ -30,6 +30,7 @@ import com.souklemdina.entities.Panier;
 import com.souklemdina.services.LigneDeCommandeServices;
 import com.souklemdina.services.PanierServices;
 import com.souklemdina.util.ImageViewerHerit;
+import com.souklemdina.util.SessionUser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +46,6 @@ public class AfficherPanier {
     Button btnSupp;
     TextField t3;
     PanierServices ps = new PanierServices();
-            FosUser fu =new FosUser(3);
         private Resources theme = UIManager.initFirstTheme("/theme");
 
 
@@ -68,7 +68,7 @@ public class AfficherPanier {
 //Panier p = new Panier(4,4,"a.jpg","karhba","55",99.);
         ps.createDB();
         // ps.addPanier(p,p.getIdu());
-        lstp = ps.returnPanier(3);
+        lstp = ps.returnPanier(SessionUser.getUser().getId());
         Image placeholder = Image.createImage(f.getWidth() / 3 - 4, f.getWidth() / 3 - 4, 0xbfc9d2);
         EncodedImage encImage = EncodedImage.createFromImage(placeholder, false);
         btnValider = new Button("Valider");
@@ -152,7 +152,7 @@ public class AfficherPanier {
         });
         Toolbar tb = f.getToolbar();
           
-        tb.addMaterialCommandToSideMenu("WishList", FontImage.MATERIAL_ADD_A_PHOTO, e->{new AfficherLigneWishlist(fu.getId()).getF().show();});
+        tb.addMaterialCommandToSideMenu("WishList", FontImage.MATERIAL_ADD_A_PHOTO, e->{new AfficherLigneWishlist(SessionUser.getUser().getId()).getF().show();});
         tb.addMaterialCommandToSideMenu("Commandes", FontImage.MATERIAL_AC_UNIT, e->{new AffichageCommande().getF().show();});
         f.show();
     }
